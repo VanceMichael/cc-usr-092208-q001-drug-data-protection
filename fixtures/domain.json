@@ -1,7 +1,7 @@
 {
   "domain": "drug-data-protection",
-  "version": 1,
-  "sample_id": "record-001",
+  "version": 2,
+  "sample_id": "record-002",
   "actors": [
     "药品申请人",
     "审评人员",
@@ -11,12 +11,822 @@
   "facts": [
     "监管部门将推进药品试验数据保护制度落地",
     "儿童药品和罕见病用药将建立市场独占期制度",
-    "制度目标之一是保障企业研发投入"
+    "制度目标之一是保障企业研发投入",
+    "同一活性成分会先后增加剂型、适应症与持有人",
+    "境内外试验数据存在授权引用、公开披露与补充提交之分"
   ],
   "constraints": [
     "研究资料权利",
     "效力区间核定",
     "冲突主张复核",
-    "决定依据追溯"
+    "决定依据追溯",
+    "历史决定只追加不得覆盖",
+    "规则换版不溯及既往"
+  ],
+  "rule_versions": [
+    {
+      "rule_id": "R1-2020",
+      "effective_from": "2020-01-01",
+      "effective_to": "2024-12-31",
+      "title": "药品试验数据保护与市场独占期暂行办法（首版）",
+      "retroactive": false,
+      "provisions": {
+        "data_protection_years": 6,
+        "orphan_exclusivity_years": 7,
+        "pediatric_exclusivity_years": 7,
+        "citation_requires_authorization": true,
+        "foreign_data_citable_with_authorization": true,
+        "public_disclosure_does_not_terminate_protection": true
+      }
+    },
+    {
+      "rule_id": "R2-2025",
+      "effective_from": "2025-01-01",
+      "effective_to": null,
+      "title": "药品试验数据保护与市场独占期办法（修订版）",
+      "retroactive": false,
+      "provisions": {
+        "data_protection_years": 6,
+        "orphan_exclusivity_years": 7,
+        "pediatric_exclusivity_years": 12,
+        "citation_requires_authorization": true,
+        "foreign_data_citable_with_authorization": true,
+        "public_disclosure_does_not_terminate_protection": true,
+        "transfer_record_required": true
+      }
+    }
+  ],
+  "staff": [
+    { "staff_id": "RV-1", "role": "reviewer" },
+    { "staff_id": "RV-2", "role": "reviewer" },
+    { "staff_id": "AP-1", "role": "approver" },
+    { "staff_id": "LR-1", "role": "legal_reviewer" }
+  ],
+  "holders": [
+    { "holder_id": "H1", "label": "华源制药" },
+    { "holder_id": "H2", "label": "北辰药业" },
+    { "holder_id": "H3", "label": "鼎晖生物" },
+    { "holder_id": "H4", "label": "普康药业" },
+    { "holder_id": "H5", "label": "恩泽生物" },
+    { "holder_id": "H6", "label": "普济制药" }
+  ],
+  "active_ingredients": [
+    { "ingredient_code": "ING-A", "label": "阿泊苷（虚构成分）" },
+    { "ingredient_code": "ING-C", "label": "西莫单抗（虚构成分）" }
+  ],
+  "indications": [
+    { "indication_id": "IND-001", "ingredient_code": "ING-A", "label": "成人非霍奇金淋巴瘤" },
+    { "indication_id": "IND-002", "ingredient_code": "ING-A", "label": "儿童实体瘤" },
+    { "indication_id": "IND-003", "ingredient_code": "ING-A", "label": "罕见病Castleman病" },
+    { "indication_id": "IND-004", "ingredient_code": "ING-A", "label": "儿童白血病" },
+    { "indication_id": "IND-005", "ingredient_code": "ING-A", "label": "儿童神经母细胞瘤" },
+    { "indication_id": "IND-101", "ingredient_code": "ING-C", "label": "罕见病阵发性睡眠性血红蛋白尿症" }
+  ],
+  "products": [
+    {
+      "product_id": "P-ORIG",
+      "holder_id": "H1",
+      "ingredient_code": "ING-A",
+      "dosage_form": "片剂",
+      "authorization_date": "2021-06-01",
+      "pediatric": false,
+      "orphan": true,
+      "parent_product_id": null
+    },
+    {
+      "product_id": "P-FORM",
+      "holder_id": "H1",
+      "ingredient_code": "ING-A",
+      "dosage_form": "注射剂",
+      "authorization_date": "2023-03-01",
+      "pediatric": true,
+      "orphan": false,
+      "parent_product_id": "P-ORIG"
+    },
+    {
+      "product_id": "P-NEW",
+      "holder_id": "H1",
+      "ingredient_code": "ING-A",
+      "dosage_form": "口服溶液",
+      "authorization_date": "2025-06-01",
+      "pediatric": true,
+      "orphan": false,
+      "parent_product_id": "P-FORM"
+    },
+    {
+      "product_id": "P-W",
+      "holder_id": "H5",
+      "ingredient_code": "ING-C",
+      "dosage_form": "胶囊剂",
+      "authorization_date": "2022-10-01",
+      "pediatric": false,
+      "orphan": false,
+      "parent_product_id": null
+    },
+    {
+      "product_id": "P-A2",
+      "holder_id": "H4",
+      "ingredient_code": "ING-A",
+      "dosage_form": "片剂",
+      "authorization_date": null,
+      "pediatric": false,
+      "orphan": false,
+      "parent_product_id": null
+    }
+  ],
+  "study_packages": [
+    {
+      "package_id": "SP-1",
+      "product_id": "P-ORIG",
+      "data_sources": [
+        {
+          "source_id": "DS-1",
+          "kind": "domestic_trial",
+          "first_submitted_on": "2020-09-01",
+          "disclosed_publicly": false,
+          "authorization": null
+        },
+        {
+          "source_id": "DS-2",
+          "kind": "foreign_trial",
+          "first_submitted_on": "2020-09-01",
+          "disclosed_publicly": true,
+          "authorization": null
+        },
+        {
+          "source_id": "DS-3",
+          "kind": "supplement",
+          "first_submitted_on": "2021-03-01",
+          "disclosed_publicly": false,
+          "authorization": null
+        }
+      ]
+    },
+    {
+      "package_id": "SP-3",
+      "product_id": "P-FORM",
+      "data_sources": [
+        {
+          "source_id": "DS-5",
+          "kind": "domestic_trial",
+          "first_submitted_on": "2023-02-01",
+          "disclosed_publicly": false,
+          "authorization": null
+        }
+      ]
+    },
+    {
+      "package_id": "SP-4",
+      "product_id": "P-W",
+      "data_sources": [
+        {
+          "source_id": "DS-6",
+          "kind": "domestic_trial",
+          "first_submitted_on": "2022-09-01",
+          "disclosed_publicly": false,
+          "authorization": null
+        }
+      ]
+    },
+    {
+      "package_id": "SP-2",
+      "product_id": "P-A2",
+      "data_sources": [
+        {
+          "source_id": "DS-10",
+          "kind": "authorized_citation",
+          "first_submitted_on": "2024-07-01",
+          "disclosed_publicly": false,
+          "authorization": {
+            "reference": "AUTH-2021-077",
+            "granter": "H1",
+            "scope_ingredient": "ING-X",
+            "valid_from": "2021-01-01",
+            "valid_until": "2023-12-31"
+          }
+        }
+      ]
+    }
+  ],
+  "submissions": [
+    {
+      "submission_id": "S-1",
+      "product_id": "P-ORIG",
+      "package_id": "SP-1",
+      "kind": "original",
+      "received_on": "2020-09-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "首仿原研上市申请，含境内外试验数据"
+    },
+    {
+      "submission_id": "S-2",
+      "product_id": "P-ORIG",
+      "package_id": "SP-1",
+      "kind": "supplement",
+      "received_on": "2021-03-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "补充提交长期随访数据"
+    },
+    {
+      "submission_id": "S-3",
+      "product_id": "P-FORM",
+      "package_id": "SP-3",
+      "kind": "supplement",
+      "received_on": "2023-02-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "新剂型儿童药研究包"
+    },
+    {
+      "submission_id": "S-8",
+      "product_id": "P-W",
+      "package_id": "SP-4",
+      "kind": "original",
+      "received_on": "2022-09-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "上市申请"
+    },
+    {
+      "submission_id": "S-4",
+      "product_id": "P-W",
+      "package_id": "SP-4",
+      "kind": "withdrawal",
+      "received_on": "2023-08-01",
+      "withdrawn": true,
+      "supersedes": null,
+      "note": "申请人撤回注册资料，数据保护权利相应放弃"
+    },
+    {
+      "submission_id": "S-6",
+      "product_id": "P-FORM",
+      "package_id": null,
+      "kind": "court_filing",
+      "received_on": "2024-04-20",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "法院受理范围争议并报送裁定"
+    },
+    {
+      "submission_id": "S-5",
+      "product_id": "P-FORM",
+      "package_id": null,
+      "kind": "transfer_record",
+      "received_on": "2024-09-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "注射剂上市许可及儿童独占期主张转让备案"
+    },
+    {
+      "submission_id": "S-7",
+      "product_id": "P-A2",
+      "package_id": "SP-2",
+      "kind": "original",
+      "received_on": "2024-07-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "仿制药申请，附境外数据授权引用函"
+    },
+    {
+      "submission_id": "S-9",
+      "product_id": "P-NEW",
+      "package_id": null,
+      "kind": "supplement",
+      "received_on": "2025-06-01",
+      "withdrawn": false,
+      "supersedes": null,
+      "note": "修订版规则实施后儿童新适应症研究包"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C-1",
+      "product_id": "P-ORIG",
+      "holder_id": "H1",
+      "basis": "orphan_exclusivity",
+      "asserted_on": "2021-05-02",
+      "submission_id": "S-1",
+      "status_history": [
+        { "status": "asserted", "on": "2021-05-02", "basis_ref": "S-1", "note": "罕见病用药市场独占期主张" },
+        { "status": "granted", "on": "2021-06-01", "basis_ref": "R1-2020", "note": "准予7年独占期" },
+        { "status": "conflicting", "on": "2024-02-10", "basis_ref": "C-3", "note": "H3对同一产品提出冲突的继受主张" },
+        { "status": "resolved", "on": "2024-04-30", "basis_ref": "C-3", "note": "H3未能提交转让备案与研究包依据，冲突主张不成立，维持H1权利" }
+      ]
+    },
+    {
+      "claim_id": "C-2",
+      "product_id": "P-FORM",
+      "holder_id": "H1",
+      "basis": "pediatric_exclusivity",
+      "asserted_on": "2023-02-10",
+      "submission_id": "S-3",
+      "status_history": [
+        { "status": "asserted", "on": "2023-02-10", "basis_ref": "S-3" },
+        { "status": "granted", "on": "2023-03-01", "basis_ref": "R1-2020", "note": "准予7年儿童药独占期，覆盖IND-002、IND-004" },
+        { "status": "narrowed", "on": "2024-05-10", "basis_ref": "CD-1", "note": "法院裁定撤销IND-002保护范围" }
+      ]
+    },
+    {
+      "claim_id": "C-3",
+      "product_id": "P-ORIG",
+      "holder_id": "H3",
+      "basis": "data_protection",
+      "asserted_on": "2024-02-01",
+      "submission_id": null,
+      "status_history": [
+        { "status": "asserted", "on": "2024-02-01", "basis_ref": "C-3", "note": "自称通过未备案的早期转让取得权利" },
+        { "status": "rejected", "on": "2024-04-30", "basis_ref": "C-3", "note": "无转让记录与研究包依据，冲突主张不成立" }
+      ]
+    },
+    {
+      "claim_id": "C-4",
+      "product_id": "P-NEW",
+      "holder_id": "H1",
+      "basis": "pediatric_exclusivity",
+      "asserted_on": "2025-06-01",
+      "submission_id": "S-9",
+      "status_history": [
+        { "status": "asserted", "on": "2025-06-01", "basis_ref": "S-9" },
+        { "status": "granted", "on": "2025-06-01", "basis_ref": "R2-2025", "note": "修订版规则下准予12年独占期，效力不回溯" }
+      ]
+    },
+    {
+      "claim_id": "C-5",
+      "product_id": "P-W",
+      "holder_id": "H5",
+      "basis": "data_protection",
+      "asserted_on": "2022-09-10",
+      "submission_id": "S-8",
+      "status_history": [
+        { "status": "asserted", "on": "2022-09-10", "basis_ref": "S-8" },
+        { "status": "granted", "on": "2022-10-01", "basis_ref": "R1-2020", "note": "准予6年数据保护" },
+        { "status": "withdrawn", "on": "2023-08-01", "basis_ref": "S-4", "note": "资料撤回，权利自放弃区间起不再有效" }
+      ]
+    }
+  ],
+  "legal_exceptions": [
+    {
+      "exception_id": "EX-1",
+      "rule_id": "R1-2020",
+      "code": "PUBLIC_HEALTH_LICENSE",
+      "title": "公共健康强制许可例外",
+      "description": "为公共利益实施强制许可的，可在保护期内受理并批准后续申请。"
+    }
+  ],
+  "transfers": [
+    {
+      "transfer_id": "T-1",
+      "product_ids": ["P-FORM"],
+      "from_holder_id": "H1",
+      "to_holder_id": "H2",
+      "effective_on": "2024-09-01",
+      "record_submission_id": "S-5"
+    }
+  ],
+  "court_decisions": [
+    {
+      "decision_id": "CD-1",
+      "handed_down_on": "2024-05-10",
+      "court": "知识产权法院",
+      "claim_id": "C-2",
+      "effect": {
+        "kind": "narrow_scope",
+        "remove_indication_ids": ["IND-002"]
+      }
+    }
+  ],
+  "events": [
+    {
+      "event_id": "EV-1",
+      "on": "2022-05-01",
+      "kind": "public_disclosure",
+      "rule_id": null,
+      "claim_id": "C-1",
+      "summary": "DS-2境外试验数据于学术期刊公开发表；依R1公开披露不终止保护"
+    },
+    {
+      "event_id": "EV-2",
+      "on": "2025-01-01",
+      "kind": "rule_change",
+      "rule_id": "R2-2025",
+      "claim_id": null,
+      "summary": "修订版规则生效，儿童药独占期延长至12年，不溯及既往"
+    }
+  ],
+  "effect_intervals": [
+    {
+      "interval_id": "I-1",
+      "claim_id": "C-1",
+      "kind": "grant",
+      "start": "2021-06-01",
+      "end": null,
+      "term_end": "2028-06-01",
+      "product_ids": ["P-ORIG"],
+      "indication_ids": ["IND-003"],
+      "holder_id": "H1",
+      "surrendered": false,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-1", "transfer_id": null, "decision_id": null },
+      "supersedes": null
+    },
+    {
+      "interval_id": "I-2",
+      "claim_id": "C-2",
+      "kind": "grant",
+      "start": "2023-03-01",
+      "end": "2024-05-10",
+      "term_end": "2030-03-01",
+      "product_ids": ["P-FORM"],
+      "indication_ids": ["IND-002", "IND-004"],
+      "holder_id": "H1",
+      "surrendered": false,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-3", "transfer_id": null, "decision_id": null },
+      "supersedes": null
+    },
+    {
+      "interval_id": "I-3",
+      "claim_id": "C-2",
+      "kind": "scope_narrow",
+      "start": "2024-05-10",
+      "end": "2024-09-01",
+      "term_end": "2030-03-01",
+      "product_ids": ["P-FORM"],
+      "indication_ids": ["IND-004"],
+      "holder_id": "H1",
+      "surrendered": false,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-6", "transfer_id": null, "decision_id": "CD-1" },
+      "supersedes": "I-2"
+    },
+    {
+      "interval_id": "I-4",
+      "claim_id": "C-2",
+      "kind": "holder_change",
+      "start": "2024-09-01",
+      "end": null,
+      "term_end": "2030-03-01",
+      "product_ids": ["P-FORM"],
+      "indication_ids": ["IND-004"],
+      "holder_id": "H2",
+      "surrendered": false,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-5", "transfer_id": "T-1", "decision_id": null },
+      "supersedes": "I-3"
+    },
+    {
+      "interval_id": "I-5",
+      "claim_id": "C-4",
+      "kind": "grant",
+      "start": "2025-06-01",
+      "end": null,
+      "term_end": "2037-06-01",
+      "product_ids": ["P-NEW"],
+      "indication_ids": ["IND-005"],
+      "holder_id": "H1",
+      "surrendered": false,
+      "basis": { "rule_id": "R2-2025", "submission_id": "S-9", "transfer_id": null, "decision_id": null },
+      "supersedes": null
+    },
+    {
+      "interval_id": "I-6",
+      "claim_id": "C-5",
+      "kind": "grant",
+      "start": "2022-10-01",
+      "end": "2023-08-01",
+      "term_end": "2028-10-01",
+      "product_ids": ["P-W"],
+      "indication_ids": ["IND-101"],
+      "holder_id": "H5",
+      "surrendered": false,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-8", "transfer_id": null, "decision_id": null },
+      "supersedes": null
+    },
+    {
+      "interval_id": "I-7",
+      "claim_id": "C-5",
+      "kind": "surrender",
+      "start": "2023-08-01",
+      "end": null,
+      "term_end": "2028-10-01",
+      "product_ids": ["P-W"],
+      "indication_ids": ["IND-101"],
+      "holder_id": "H5",
+      "surrendered": true,
+      "basis": { "rule_id": "R1-2020", "submission_id": "S-4", "transfer_id": null, "decision_id": null },
+      "supersedes": "I-6"
+    }
+  ],
+  "applications": [
+    {
+      "application_id": "A-0",
+      "applicant_holder_id": "H4",
+      "filed_on": "2022-04-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": null,
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-1",
+      "applicant_holder_id": "H4",
+      "filed_on": "2024-06-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": "P-A2",
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-2",
+      "applicant_holder_id": "H4",
+      "filed_on": "2024-07-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": "P-A2",
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": ["DS-10"],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-3",
+      "applicant_holder_id": "H4",
+      "filed_on": "2024-02-15",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": "P-A2",
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-4",
+      "applicant_holder_id": "H4",
+      "filed_on": "2024-08-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": "P-A2",
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": [],
+      "invokes_exception_id": "EX-1"
+    },
+    {
+      "application_id": "A-5",
+      "applicant_holder_id": "H4",
+      "filed_on": "2029-02-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": null,
+      "target_indication_id": "IND-003",
+      "relies_on_originator_data": true,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-6",
+      "applicant_holder_id": "H4",
+      "filed_on": "2031-10-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": null,
+      "target_indication_id": "IND-005",
+      "relies_on_originator_data": false,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-7",
+      "applicant_holder_id": "H6",
+      "filed_on": "2024-05-01",
+      "target_ingredient_code": "ING-C",
+      "target_product_id": null,
+      "target_indication_id": "IND-101",
+      "relies_on_originator_data": false,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    },
+    {
+      "application_id": "A-8",
+      "applicant_holder_id": "H4",
+      "filed_on": "2029-03-01",
+      "target_ingredient_code": "ING-A",
+      "target_product_id": null,
+      "target_indication_id": "IND-004",
+      "relies_on_originator_data": false,
+      "citation_source_ids": [],
+      "invokes_exception_id": null
+    }
+  ],
+  "determinations": [
+    {
+      "determination_id": "D-1",
+      "application_id": "A-0",
+      "decided_on": "2022-04-15",
+      "outcome": "wait",
+      "wait_until": "2028-06-01",
+      "pending_items": [],
+      "reasons": ["IND-003处于C-1罕见病独占期内，依据R1-2020保护至2028-06-01"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-2",
+      "application_id": "A-3",
+      "decided_on": "2024-02-20",
+      "outcome": "suspend",
+      "wait_until": null,
+      "pending_items": [
+        { "code": "claim_conflict", "detail": "C-1与C-3就P-ORIG权利归属存在未决冲突，需复核转让依据", "source_id": null }
+      ],
+      "reasons": ["冲突主张未裁决前暂缓受理"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1", "C-3"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-2",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-3",
+      "application_id": "A-1",
+      "decided_on": "2024-06-10",
+      "outcome": "wait",
+      "wait_until": "2028-06-01",
+      "pending_items": [],
+      "reasons": [
+        "IND-003处于C-1独占期内，等待保护期届满",
+        "DS-2境外数据虽已公开披露，依R1不终止保护"
+      ],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-4",
+      "application_id": "A-2",
+      "decided_on": "2024-07-12",
+      "outcome": "suspend",
+      "wait_until": null,
+      "pending_items": [
+        { "code": "citation_authorization_expired", "detail": "授权引用函AUTH-2021-077有效期至2023-12-31，已届满", "source_id": "DS-10" },
+        { "code": "citation_scope_mismatch", "detail": "授权范围成分ING-X与申请目标成分ING-A不一致", "source_id": "DS-10" }
+      ],
+      "reasons": ["授权引用证据待补正，暂缓受理"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": ["DS-10"],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-5",
+      "application_id": "A-4",
+      "decided_on": "2024-08-10",
+      "outcome": "accept",
+      "wait_until": null,
+      "pending_items": [],
+      "reasons": ["申请人主张EX-1公共健康强制许可例外，符合R1法定例外，可在保护期内受理"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": [],
+        "exception_ids": ["EX-1"],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "LR-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-6",
+      "application_id": "A-3",
+      "decided_on": "2024-09-10",
+      "outcome": "wait",
+      "wait_until": "2028-06-01",
+      "pending_items": [],
+      "reasons": ["冲突主张已于2024-04-30复核驳回，继续等待C-1保护期届满；此前D-2记录保留不改写"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-2",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-7",
+      "application_id": "A-7",
+      "decided_on": "2024-05-15",
+      "outcome": "accept",
+      "wait_until": null,
+      "pending_items": [],
+      "reasons": ["C-5数据保护已因S-4撤回形成放弃区间I-7，不再阻止后续申请；原授予区间I-6仍留存可溯"],
+      "basis": {
+        "rule_id": "R1-2020",
+        "interval_ids": ["I-6", "I-7"],
+        "claim_ids": ["C-5"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-8",
+      "application_id": "A-5",
+      "decided_on": "2029-02-10",
+      "outcome": "accept",
+      "wait_until": null,
+      "pending_items": [],
+      "reasons": ["C-1保护期已于2028-06-01届满，区间I-1成为历史记录"],
+      "basis": {
+        "rule_id": "R2-2025",
+        "interval_ids": ["I-1"],
+        "claim_ids": ["C-1"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-9",
+      "application_id": "A-6",
+      "decided_on": "2031-10-10",
+      "outcome": "wait",
+      "wait_until": "2037-06-01",
+      "pending_items": [],
+      "reasons": ["IND-005处于C-4儿童药独占期内；该主张依R2-2025授予，保护期12年"],
+      "basis": {
+        "rule_id": "R2-2025",
+        "interval_ids": ["I-5"],
+        "claim_ids": ["C-4"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": [],
+        "transfer_ids": []
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    },
+    {
+      "determination_id": "D-10",
+      "application_id": "A-8",
+      "decided_on": "2029-03-10",
+      "outcome": "wait",
+      "wait_until": "2030-03-01",
+      "pending_items": [],
+      "reasons": [
+        "IND-004仍在C-2有效期内；其授予依据为R1-2020，期限7年，R2-2025延长至12年不溯及既往",
+        "当前权利人为H2（见T-1转让区间I-4）"
+      ],
+      "basis": {
+        "rule_id": "R2-2025",
+        "interval_ids": ["I-4"],
+        "claim_ids": ["C-2"],
+        "source_ids": [],
+        "exception_ids": [],
+        "decision_ids": ["CD-1"],
+        "transfer_ids": ["T-1"]
+      },
+      "reviewer_id": "RV-1",
+      "approver_id": "AP-1"
+    }
   ]
 }

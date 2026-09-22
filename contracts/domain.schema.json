@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "药物试验数据保护期核定共享资料",
+  "description": "所有记录只追加：撤回、持有人变更、法院决定、规则换版均产生新的效力区间或事件，任何历史记录不得被后来状态覆盖。",
   "type": "object",
   "required": [
     "domain",
@@ -8,40 +9,426 @@
     "sample_id",
     "actors",
     "facts",
-    "constraints"
+    "constraints",
+    "rule_versions",
+    "staff",
+    "holders",
+    "active_ingredients",
+    "indications",
+    "products",
+    "study_packages",
+    "submissions",
+    "claims",
+    "legal_exceptions",
+    "transfers",
+    "court_decisions",
+    "events",
+    "effect_intervals",
+    "applications",
+    "determinations"
   ],
   "properties": {
-    "domain": {
-      "type": "string",
-      "minLength": 1
-    },
-    "version": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "sample_id": {
-      "type": "string",
-      "minLength": 1
-    },
+    "domain": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "sample_id": { "type": "string", "minLength": 1 },
     "actors": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "facts": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "constraints": {
       "type": "array",
       "minItems": 2,
+      "items": { "type": "string" }
+    },
+    "rule_versions": {
+      "type": "array",
+      "minItems": 1,
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["rule_id", "effective_from", "title", "provisions"],
+        "properties": {
+          "rule_id": { "type": "string" },
+          "effective_from": { "type": "string", "format": "date" },
+          "effective_to": { "type": ["string", "null"], "format": "date" },
+          "title": { "type": "string" },
+          "provisions": { "type": "object" },
+          "retroactive": { "type": "boolean", "const": false }
+        },
+        "additionalProperties": false
+      }
+    },
+    "staff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["staff_id", "role"],
+        "properties": {
+          "staff_id": { "type": "string" },
+          "role": { "type": "string", "enum": ["reviewer", "approver", "legal_reviewer"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "holders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["holder_id", "label"],
+        "properties": {
+          "holder_id": { "type": "string" },
+          "label": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "active_ingredients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ingredient_code", "label"],
+        "properties": {
+          "ingredient_code": { "type": "string" },
+          "label": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "indications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["indication_id", "ingredient_code", "label"],
+        "properties": {
+          "indication_id": { "type": "string" },
+          "ingredient_code": { "type": "string" },
+          "label": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["product_id", "holder_id", "ingredient_code", "dosage_form", "authorization_date", "pediatric", "orphan"],
+        "properties": {
+          "product_id": { "type": "string" },
+          "holder_id": { "type": "string" },
+          "ingredient_code": { "type": "string" },
+          "dosage_form": { "type": "string" },
+          "authorization_date": { "type": ["string", "null"], "format": "date" },
+          "pediatric": { "type": "boolean" },
+          "orphan": { "type": "boolean" },
+          "parent_product_id": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "study_packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["package_id", "product_id", "data_sources"],
+        "properties": {
+          "package_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "data_sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["source_id", "kind", "first_submitted_on"],
+              "properties": {
+                "source_id": { "type": "string" },
+                "kind": {
+                  "type": "string",
+                  "enum": ["domestic_trial", "foreign_trial", "authorized_citation", "public_disclosure", "supplement"]
+                },
+                "first_submitted_on": { "type": "string", "format": "date" },
+                "disclosed_publicly": { "type": "boolean" },
+                "authorization": {
+                  "type": ["object", "null"],
+                  "required": ["reference", "granter", "scope_ingredient", "valid_from", "valid_until"],
+                  "properties": {
+                    "reference": { "type": "string" },
+                    "granter": { "type": "string" },
+                    "scope_ingredient": { "type": "string" },
+                    "valid_from": { "type": "string", "format": "date" },
+                    "valid_until": { "type": "string", "format": "date" }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "submissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["submission_id", "product_id", "kind", "received_on", "withdrawn"],
+        "properties": {
+          "submission_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "package_id": { "type": ["string", "null"] },
+          "kind": {
+            "type": "string",
+            "enum": ["original", "supplement", "withdrawal", "transfer_record", "court_filing"]
+          },
+          "received_on": { "type": "string", "format": "date" },
+          "withdrawn": { "type": "boolean" },
+          "supersedes": { "type": ["string", "null"] },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "product_id", "holder_id", "basis", "asserted_on", "status_history"],
+        "properties": {
+          "claim_id": { "type": "string" },
+          "product_id": { "type": "string" },
+          "holder_id": { "type": "string" },
+          "basis": {
+            "type": "string",
+            "enum": ["pediatric_exclusivity", "orphan_exclusivity", "data_protection"]
+          },
+          "asserted_on": { "type": "string", "format": "date" },
+          "submission_id": { "type": ["string", "null"] },
+          "status_history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["status", "on", "basis_ref"],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["asserted", "granted", "rejected", "withdrawn", "conflicting", "resolved", "narrowed"]
+                },
+                "on": { "type": "string", "format": "date" },
+                "basis_ref": { "type": "string" },
+                "note": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "legal_exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["exception_id", "rule_id", "code", "title"],
+        "properties": {
+          "exception_id": { "type": "string" },
+          "rule_id": { "type": "string" },
+          "code": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "transfers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["transfer_id", "product_ids", "from_holder_id", "to_holder_id", "effective_on", "record_submission_id"],
+        "properties": {
+          "transfer_id": { "type": "string" },
+          "product_ids": { "type": "array", "items": { "type": "string" } },
+          "from_holder_id": { "type": "string" },
+          "to_holder_id": { "type": "string" },
+          "effective_on": { "type": "string", "format": "date" },
+          "record_submission_id": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "court_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decision_id", "handed_down_on", "court", "claim_id", "effect"],
+        "properties": {
+          "decision_id": { "type": "string" },
+          "handed_down_on": { "type": "string", "format": "date" },
+          "court": { "type": "string" },
+          "claim_id": { "type": "string" },
+          "effect": {
+            "type": "object",
+            "required": ["kind", "remove_indication_ids"],
+            "properties": {
+              "kind": { "type": "string", "enum": ["narrow_scope"] },
+              "remove_indication_ids": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_id", "on", "kind", "summary"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "on": { "type": "string", "format": "date" },
+          "kind": { "type": "string", "enum": ["rule_change", "public_disclosure", "note"] },
+          "rule_id": { "type": ["string", "null"] },
+          "claim_id": { "type": ["string", "null"] },
+          "summary": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "effect_intervals": {
+      "type": "array",
+      "description": "保护权利的效力区间，按 supersedes 逐段接替；同一链上 term_end 必须一致，届满日不因撤回以外的事件改变（撤回以 surrendered 段保留历史）。",
+      "items": {
+        "type": "object",
+        "required": [
+          "interval_id",
+          "claim_id",
+          "kind",
+          "start",
+          "end",
+          "term_end",
+          "product_ids",
+          "indication_ids",
+          "holder_id",
+          "surrendered",
+          "basis",
+          "supersedes"
+        ],
+        "properties": {
+          "interval_id": { "type": "string" },
+          "claim_id": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["grant", "scope_extend", "scope_narrow", "holder_change", "surrender"]
+          },
+          "start": { "type": "string", "format": "date" },
+          "end": { "type": ["string", "null"], "format": "date" },
+          "term_end": { "type": "string", "format": "date" },
+          "product_ids": { "type": "array", "items": { "type": "string" } },
+          "indication_ids": { "type": "array", "items": { "type": "string" } },
+          "holder_id": { "type": "string" },
+          "surrendered": { "type": "boolean" },
+          "basis": {
+            "type": "object",
+            "required": ["rule_id"],
+            "properties": {
+              "rule_id": { "type": "string" },
+              "submission_id": { "type": ["string", "null"] },
+              "transfer_id": { "type": ["string", "null"] },
+              "decision_id": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          },
+          "supersedes": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "application_id",
+          "applicant_holder_id",
+          "filed_on",
+          "target_ingredient_code",
+          "target_indication_id",
+          "relies_on_originator_data",
+          "citation_source_ids"
+        ],
+        "properties": {
+          "application_id": { "type": "string" },
+          "applicant_holder_id": { "type": "string" },
+          "filed_on": { "type": "string", "format": "date" },
+          "target_ingredient_code": { "type": "string" },
+          "target_product_id": { "type": ["string", "null"] },
+          "target_indication_id": { "type": "string" },
+          "relies_on_originator_data": { "type": "boolean" },
+          "citation_source_ids": { "type": "array", "items": { "type": "string" } },
+          "invokes_exception_id": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "determinations": {
+      "type": "array",
+      "description": "核定记录只追加：结论为 accept/suspend/wait；每条钉住当时有效规则、效力区间、证据与签批人，永不被后来状态改写。",
+      "items": {
+        "type": "object",
+        "required": [
+          "determination_id",
+          "application_id",
+          "decided_on",
+          "outcome",
+          "wait_until",
+          "pending_items",
+          "reasons",
+          "basis",
+          "reviewer_id",
+          "approver_id"
+        ],
+        "properties": {
+          "determination_id": { "type": "string" },
+          "application_id": { "type": "string" },
+          "decided_on": { "type": "string", "format": "date" },
+          "outcome": { "type": "string", "enum": ["accept", "suspend", "wait"] },
+          "wait_until": { "type": ["string", "null"], "format": "date" },
+          "pending_items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["code", "detail"],
+              "properties": {
+                "code": { "type": "string" },
+                "detail": { "type": "string" },
+                "source_id": { "type": ["string", "null"] }
+              },
+              "additionalProperties": false
+            }
+          },
+          "reasons": { "type": "array", "items": { "type": "string" } },
+          "basis": {
+            "type": "object",
+            "required": ["rule_id", "interval_ids", "claim_ids"],
+            "properties": {
+              "rule_id": { "type": "string" },
+              "interval_ids": { "type": "array", "items": { "type": "string" } },
+              "claim_ids": { "type": "array", "items": { "type": "string" } },
+              "source_ids": { "type": "array", "items": { "type": "string" } },
+              "exception_ids": { "type": "array", "items": { "type": "string" } },
+              "decision_ids": { "type": "array", "items": { "type": "string" } },
+              "transfer_ids": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          "reviewer_id": { "type": "string" },
+          "approver_id": { "type": "string" }
+        },
+        "additionalProperties": false
       }
     }
   },
