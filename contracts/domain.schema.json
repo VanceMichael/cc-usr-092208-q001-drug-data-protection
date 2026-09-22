@@ -8,42 +8,304 @@
     "sample_id",
     "actors",
     "facts",
-    "constraints"
+    "constraints",
+    "regulation_versions",
+    "products",
+    "study_packages",
+    "submissions",
+    "claims",
+    "determinations",
+    "applications",
+    "administrative_reviews"
   ],
   "properties": {
-    "domain": {
-      "type": "string",
-      "minLength": 1
-    },
-    "version": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "sample_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "actors": {
+    "domain": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 2},
+    "sample_id": {"type": "string", "minLength": 1},
+    "actors": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "facts": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "constraints": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+
+    "regulation_versions": {
       "type": "array",
-      "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": {"$ref": "#/$defs/regulation"}
     },
-    "facts": {
-      "type": "array",
-      "minItems": 2,
-      "items": {
-        "type": "string"
-      }
-    },
-    "constraints": {
-      "type": "array",
-      "minItems": 2,
-      "items": {
-        "type": "string"
-      }
-    }
+    "authorizations": {"type": "array", "items": {"$ref": "#/$defs/authorization"}},
+    "products": {"type": "array", "items": {"$ref": "#/$defs/product"}},
+    "study_packages": {"type": "array", "items": {"$ref": "#/$defs/study_package"}},
+    "submissions": {"type": "array", "items": {"$ref": "#/$defs/submission"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/claim"}},
+    "exceptions": {"type": "array", "items": {"$ref": "#/$defs/exception"}},
+    "transfers": {"type": "array", "items": {"$ref": "#/$defs/transfer"}},
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+    "determinations": {"type": "array", "items": {"$ref": "#/$defs/determination"}},
+    "applications": {"type": "array", "items": {"$ref": "#/$defs/application"}},
+    "administrative_reviews": {"type": "array", "items": {"$ref": "#/$defs/review"}}
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "date_str": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "date_or_null": {
+      "anyOf": [
+        {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        {"type": "null"}
+      ]
+    },
+    "approval_step": {
+      "type": "object",
+      "required": ["step", "by", "at", "role", "note"],
+      "properties": {
+        "step": {"type": "string"},
+        "by": {"type": "string"},
+        "at": {"type": "string"},
+        "role": {"type": "string"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "regulation": {
+      "type": "object",
+      "required": ["reg_id", "title", "effective_date", "repeal_date", "terms_days"],
+      "properties": {
+        "reg_id": {"type": "string"},
+        "title": {"type": "string"},
+        "effective_date": {"$ref": "#/$defs/date_str"},
+        "repeal_date": {"$ref": "#/$defs/date_or_null"},
+        "terms_days": {
+          "type": "object",
+          "properties": {
+            "pediatric": {"type": "integer", "minimum": 0},
+            "orphan": {"type": "integer", "minimum": 0},
+            "general": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "exceptions_applicable": {"type": "array", "items": {"type": "string"}},
+        "gazette_refs": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "required": ["authorization_id", "granter", "grantee", "scope", "effective_date", "revoked_date"],
+      "properties": {
+        "authorization_id": {"type": "string"},
+        "granter": {"type": "string"},
+        "grantee": {"type": "string"},
+        "scope": {"type": "string"},
+        "effective_date": {"$ref": "#/$defs/date_str"},
+        "revoked_date": {"$ref": "#/$defs/date_or_null"}
+      },
+      "additionalProperties": false
+    },
+    "product_relation": {
+      "type": "object",
+      "required": ["rel_id", "kind", "related_product_id", "effective_date", "basis_submission_id"],
+      "properties": {
+        "rel_id": {"type": "string"},
+        "kind": {"type": "string"},
+        "related_product_id": {"type": "string"},
+        "effective_date": {"$ref": "#/$defs/date_str"},
+        "basis_submission_id": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "product": {
+      "type": "object",
+      "required": ["product_id", "active_ingredient", "dosage_form", "indication", "holder", "first_approval_date", "relations"],
+      "properties": {
+        "product_id": {"type": "string"},
+        "active_ingredient": {"type": "string"},
+        "dosage_form": {"type": "string"},
+        "indication": {"type": "string"},
+        "holder": {"type": "string"},
+        "first_approval_date": {"$ref": "#/$defs/date_str"},
+        "relations": {"type": "array", "items": {"$ref": "#/$defs/product_relation"}}
+      },
+      "additionalProperties": false
+    },
+    "data_source": {
+      "type": "object",
+      "required": ["source_id", "origin", "status", "disclosed_date", "authorization_id"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "origin": {"type": "string"},
+        "status": {"enum": ["自有数据", "授权引用", "公开披露", "补充提交"]},
+        "disclosed_date": {"$ref": "#/$defs/date_or_null"},
+        "authorization_id": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "study_package": {
+      "type": "object",
+      "required": ["package_id", "product_id", "data_sources"],
+      "properties": {
+        "package_id": {"type": "string"},
+        "product_id": {"type": "string"},
+        "data_sources": {"type": "array", "items": {"$ref": "#/$defs/data_source"}}
+      },
+      "additionalProperties": false
+    },
+    "submission": {
+      "type": "object",
+      "required": ["submission_id", "product_id", "applicant", "received_date", "type", "version", "supersedes", "package_ids", "withdrawn_date"],
+      "properties": {
+        "submission_id": {"type": "string"},
+        "product_id": {"type": "string"},
+        "applicant": {"type": "string"},
+        "received_date": {"$ref": "#/$defs/date_str"},
+        "type": {"type": "string"},
+        "version": {"type": "integer", "minimum": 1},
+        "supersedes": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "package_ids": {"type": "array", "items": {"type": "string"}},
+        "withdrawn_date": {"$ref": "#/$defs/date_or_null"},
+        "additional_info_requested_date": {"$ref": "#/$defs/date_str"}
+      },
+      "additionalProperties": false
+    },
+    "interval": {
+      "type": "object",
+      "required": ["interval_id", "start_date", "end_date", "status", "event_id", "reg_id", "term_days", "determination_id"],
+      "properties": {
+        "interval_id": {"type": "string"},
+        "start_date": {"$ref": "#/$defs/date_str"},
+        "end_date": {"$ref": "#/$defs/date_or_null"},
+        "status": {"enum": ["active", "suspended", "pending", "expired"]},
+        "event_id": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "reg_id": {"type": "string"},
+        "term_days": {"type": "integer", "minimum": 0},
+        "determination_id": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": ["claim_id", "product_id", "submission_id", "holder", "kind", "category", "start_date", "initial_term_days", "initial_reg_id", "disclosable", "pending_items", "intervals"],
+      "properties": {
+        "claim_id": {"type": "string"},
+        "product_id": {"type": "string"},
+        "submission_id": {"type": "string"},
+        "holder": {"type": "string"},
+        "kind": {"type": "string"},
+        "category": {"enum": ["pediatric", "orphan", "general"]},
+        "start_date": {"$ref": "#/$defs/date_str"},
+        "initial_term_days": {"type": "integer", "minimum": 0},
+        "initial_reg_id": {"type": "string"},
+        "disclosable": {"type": "boolean"},
+        "pending_items": {"type": "array", "items": {"type": "string"}},
+        "applicant_pending_items": {"type": "array", "items": {"type": "string"}},
+        "intervals": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/interval"}}
+      },
+      "additionalProperties": false
+    },
+    "exception": {
+      "type": "object",
+      "required": ["exception_id", "claim_id", "label", "start_date", "end_date", "determination_id", "disclosable"],
+      "properties": {
+        "exception_id": {"type": "string"},
+        "claim_id": {"type": "string"},
+        "label": {"type": "string"},
+        "start_date": {"$ref": "#/$defs/date_str"},
+        "end_date": {"$ref": "#/$defs/date_str"},
+        "determination_id": {"type": "string"},
+        "disclosable": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "transfer": {
+      "type": "object",
+      "required": ["transfer_id", "claim_id", "from_holder", "to_holder", "effective_date", "record_ref", "note"],
+      "properties": {
+        "transfer_id": {"type": "string"},
+        "claim_id": {"type": "string"},
+        "from_holder": {"type": "string"},
+        "to_holder": {"type": "string"},
+        "effective_date": {"$ref": "#/$defs/date_str"},
+        "record_ref": {"type": "string"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["event_id", "type", "date"],
+      "properties": {
+        "event_id": {"type": "string"},
+        "type": {"enum": ["撤回资料", "持有人变更", "法院决定", "规则换版"]},
+        "date": {"$ref": "#/$defs/date_str"},
+        "claim_id": {"type": "string"},
+        "submission_id": {"type": "string"},
+        "transfer_id": {"type": "string"},
+        "new_reg_id": {"type": "string"},
+        "court_ref": {"type": "string"},
+        "determination_id": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "determination": {
+      "type": "object",
+      "required": ["determination_id", "claim_id", "submission_id", "date", "decision", "reg_id", "terms_at_decision", "data_sources_relied_on", "approval_cycle", "frozen_record"],
+      "properties": {
+        "determination_id": {"type": "string"},
+        "claim_id": {"type": "string"},
+        "submission_id": {"type": "string"},
+        "date": {"$ref": "#/$defs/date_str"},
+        "decision": {"type": "string"},
+        "reg_id": {"type": "string"},
+        "terms_at_decision": {"type": "object"},
+        "data_sources_relied_on": {"type": "array", "items": {"type": "string"}},
+        "approval_cycle": {"type": "array", "items": {"$ref": "#/$defs/approval_step"}},
+        "frozen_record": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "application": {
+      "type": "object",
+      "required": ["application_id", "product_id", "applicant_name", "filing_date", "target_claim_ids", "ask", "review_determination_id"],
+      "properties": {
+        "application_id": {"type": "string"},
+        "product_id": {"type": "string"},
+        "applicant_name": {"type": "string"},
+        "filing_date": {"$ref": "#/$defs/date_str"},
+        "target_claim_ids": {"type": "array", "items": {"type": "string"}},
+        "related_unconfirmed_claim_ids": {"type": "array", "items": {"type": "string"}},
+        "invoke_exception_id": {"type": "string"},
+        "ask": {"type": "string"},
+        "review_determination_id": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "basis_interval": {
+      "type": "object",
+      "required": ["claim_id", "interval_id", "status", "term_days", "determination_id"],
+      "properties": {
+        "claim_id": {"type": "string"},
+        "interval_id": {"type": "string"},
+        "status": {"type": "string"},
+        "term_days": {"type": "integer"},
+        "determination_id": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": ["review_id", "application_id", "date", "outcome", "reg_id", "basis_claim_intervals", "basis_exception_ids", "approval_cycle", "expectations_visible_to_applicant", "pending_items_for_applicant", "frozen_record"],
+      "properties": {
+        "review_id": {"type": "string"},
+        "application_id": {"type": "string"},
+        "date": {"$ref": "#/$defs/date_str"},
+        "outcome": {"enum": ["受理", "暂缓", "等待保护期届满"]},
+        "reg_id": {"type": "string"},
+        "basis_claim_intervals": {"type": "array", "items": {"$ref": "#/$defs/basis_interval"}},
+        "basis_exception_ids": {"type": "array", "items": {"type": "string"}},
+        "unconfirmed_claim_ids": {"type": "array", "items": {"type": "string"}},
+        "approval_cycle": {"type": "array", "items": {"$ref": "#/$defs/approval_step"}},
+        "expectations_visible_to_applicant": {"type": "array", "items": {"type": "string"}},
+        "pending_items_for_applicant": {"type": "array", "items": {"type": "string"}},
+        "frozen_record": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  }
 }

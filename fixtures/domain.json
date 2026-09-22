@@ -1,22 +1,711 @@
 {
   "domain": "drug-data-protection",
-  "version": 1,
-  "sample_id": "record-001",
+  "version": 2,
+  "sample_id": "record-002",
   "actors": [
     "药品申请人",
+    "受理人员",
     "审评人员",
     "法规复核人员",
+    "授权签发人",
     "数据权利持有人"
   ],
   "facts": [
     "监管部门将推进药品试验数据保护制度落地",
-    "儿童药品和罕见病用药将建立市场独占期制度",
+    "儿童药和罕见病用药将建立市场独占期制度",
+    "同一活性成分还会先后增加剂型、适应症和持有人",
+    "境内外试验数据有授权引用、公开披露与补充提交之分",
+    "撤回资料、持有人变更、法院决定或规则换版只能形成新的效力区间",
     "制度目标之一是保障企业研发投入"
   ],
   "constraints": [
     "研究资料权利",
     "效力区间核定",
     "冲突主张复核",
-    "决定依据追溯"
+    "决定依据可追溯",
+    "历史决定不被后来状态覆盖",
+    "申请人只能看到可披露的保护范围与待补事项",
+    "后来申请的处置只能回到申请当日有效的规则版本、数据来源与签批决定"
+  ],
+  "regulation_versions": [
+    {
+      "reg_id": "REG-2024",
+      "title": "药品试验数据保护暂行办法（示例）",
+      "effective_date": "2024-01-01",
+      "repeal_date": null,
+      "terms_days": {
+        "pediatric": 1826,
+        "orphan": 2557,
+        "general": 2192
+      },
+      "exceptions_applicable": [
+        "为应对突发公共卫生事件而调用",
+        "已在境外披露但符合相互承认安排"
+      ],
+      "gazette_refs": ["GAZ-2024-001", "GAZ-2024-002"]
+    },
+    {
+      "reg_id": "REG-2026",
+      "title": "药品试验数据保护办法（示例新版）",
+      "effective_date": "2026-03-01",
+      "repeal_date": null,
+      "terms_days": {
+        "pediatric": 2557,
+        "orphan": 2557,
+        "general": 2192
+      },
+      "exceptions_applicable": [
+        "为应对突发公共卫生事件而调用",
+        "已在境外披露但符合相互承认安排"
+      ],
+      "gazette_refs": ["GAZ-2026-001"]
+    }
+  ],
+  "authorizations": [
+    {
+      "authorization_id": "AUTH-01",
+      "granter": "境外权利人（示例）",
+      "grantee": "甲公司",
+      "scope": "仅限 P-101 片剂适应症使用",
+      "effective_date": "2024-02-15",
+      "revoked_date": null
+    }
+  ],
+  "products": [
+    {
+      "product_id": "P-101",
+      "active_ingredient": "示例酸A",
+      "dosage_form": "片剂",
+      "indication": "儿童罕见代谢病X",
+      "holder": "甲公司",
+      "first_approval_date": "2024-06-30",
+      "relations": [
+        {
+          "rel_id": "REL-1",
+          "kind": "新剂型",
+          "related_product_id": "P-102",
+          "effective_date": "2025-02-01",
+          "basis_submission_id": "S-201"
+        }
+      ]
+    },
+    {
+      "product_id": "P-102",
+      "active_ingredient": "示例酸A",
+      "dosage_form": "注射剂",
+      "indication": "儿童罕见代谢病X",
+      "holder": "甲公司",
+      "first_approval_date": "2025-02-01",
+      "relations": []
+    },
+    {
+      "product_id": "P-201",
+      "active_ingredient": "示例酸A",
+      "dosage_form": "注射剂",
+      "indication": "成人呼吸窘迫",
+      "holder": "乙公司",
+      "first_approval_date": "2025-09-01",
+      "relations": []
+    }
+  ],
+  "study_packages": [
+    {
+      "package_id": "K-01",
+      "product_id": "P-101",
+      "data_sources": [
+        {
+          "source_id": "D-01",
+          "origin": "境内临床试验",
+          "status": "自有数据",
+          "disclosed_date": null,
+          "authorization_id": null
+        },
+        {
+          "source_id": "D-02",
+          "origin": "境外临床试验",
+          "status": "授权引用",
+          "disclosed_date": "2024-03-01",
+          "authorization_id": "AUTH-01"
+        }
+      ]
+    },
+    {
+      "package_id": "K-02",
+      "product_id": "P-102",
+      "data_sources": [
+        {
+          "source_id": "D-03",
+          "origin": "境内桥接试验",
+          "status": "公开披露",
+          "disclosed_date": "2024-12-01",
+          "authorization_id": null
+        },
+        {
+          "source_id": "D-04",
+          "origin": "境内补充申请试验",
+          "status": "补充提交",
+          "disclosed_date": null,
+          "authorization_id": null
+        }
+      ]
+    },
+    {
+      "package_id": "K-03",
+      "product_id": "P-201",
+      "data_sources": [
+        {
+          "source_id": "D-05",
+          "origin": "境外临床试验",
+          "status": "授权引用",
+          "disclosed_date": "2024-03-01",
+          "authorization_id": "AUTH-01"
+        }
+      ]
+    }
+  ],
+  "submissions": [
+    {
+      "submission_id": "S-101",
+      "product_id": "P-101",
+      "applicant": "甲公司",
+      "received_date": "2024-05-10",
+      "type": "上市许可申请",
+      "version": 1,
+      "supersedes": null,
+      "package_ids": ["K-01"],
+      "withdrawn_date": "2024-05-25"
+    },
+    {
+      "submission_id": "S-101a",
+      "product_id": "P-101",
+      "applicant": "甲公司",
+      "received_date": "2024-05-20",
+      "type": "上市许可申请",
+      "version": 2,
+      "supersedes": "S-101",
+      "package_ids": ["K-01"],
+      "withdrawn_date": null
+    },
+    {
+      "submission_id": "S-201",
+      "product_id": "P-102",
+      "applicant": "甲公司",
+      "received_date": "2025-01-10",
+      "type": "新剂型申请",
+      "version": 1,
+      "supersedes": null,
+      "package_ids": ["K-02"],
+      "withdrawn_date": null
+    },
+    {
+      "submission_id": "S-301",
+      "product_id": "P-201",
+      "applicant": "乙公司",
+      "received_date": "2025-08-01",
+      "type": "上市许可申请",
+      "version": 1,
+      "supersedes": null,
+      "package_ids": ["K-03"],
+      "withdrawn_date": null,
+      "additional_info_requested_date": "2025-08-05"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C-101",
+      "product_id": "P-101",
+      "submission_id": "S-101a",
+      "holder": "甲公司",
+      "kind": "市场独占期",
+      "category": "pediatric",
+      "start_date": "2024-06-30",
+      "initial_term_days": 1826,
+      "initial_reg_id": "REG-2024",
+      "disclosable": true,
+      "pending_items": [],
+      "intervals": [
+        {
+          "interval_id": "C-101-I1",
+          "start_date": "2024-06-30",
+          "end_date": null,
+          "status": "active",
+          "event_id": null,
+          "reg_id": "REG-2024",
+          "term_days": 1826,
+          "determination_id": "DET-2024-01"
+        }
+      ]
+    },
+    {
+      "claim_id": "C-102",
+      "product_id": "P-102",
+      "submission_id": "S-201",
+      "holder": "甲公司",
+      "kind": "市场独占期",
+      "category": "orphan",
+      "start_date": "2025-02-01",
+      "initial_term_days": 2557,
+      "initial_reg_id": "REG-2024",
+      "disclosable": true,
+      "pending_items": [],
+      "intervals": [
+        {
+          "interval_id": "C-102-I1",
+          "start_date": "2025-02-01",
+          "end_date": "2025-06-30",
+          "status": "active",
+          "event_id": null,
+          "reg_id": "REG-2024",
+          "term_days": 2557,
+          "determination_id": "DET-2025-01"
+        },
+        {
+          "interval_id": "C-102-I2",
+          "start_date": "2025-06-30",
+          "end_date": "2025-09-30",
+          "status": "suspended",
+          "event_id": "E-COURT-1",
+          "reg_id": "REG-2024",
+          "term_days": 0,
+          "determination_id": "DET-2025-02"
+        },
+        {
+          "interval_id": "C-102-I3",
+          "start_date": "2025-09-30",
+          "end_date": "2026-03-01",
+          "status": "active",
+          "event_id": "E-COURT-2",
+          "reg_id": "REG-2024",
+          "term_days": 2557,
+          "determination_id": "DET-2025-03"
+        },
+        {
+          "interval_id": "C-102-I4",
+          "start_date": "2026-03-01",
+          "end_date": null,
+          "status": "active",
+          "event_id": "E-REG-1",
+          "reg_id": "REG-2026",
+          "term_days": 2557,
+          "determination_id": "DET-2026-01"
+        }
+      ]
+    },
+    {
+      "claim_id": "C-201",
+      "product_id": "P-201",
+      "submission_id": "S-301",
+      "holder": "乙公司",
+      "kind": "市场独占期",
+      "category": "general",
+      "start_date": "2025-08-10",
+      "initial_term_days": 2192,
+      "initial_reg_id": "REG-2024",
+      "disclosable": true,
+      "pending_items": [
+        "AUTH-01 授权范围仅限 P-101 片剂，D-05 引用该授权用于 P-201 注射剂的依据不足",
+        "P-201 与 P-102 为同一活性成分，产品关系认定待补充"
+      ],
+      "applicant_pending_items": [
+        "请补充境外试验数据授权文件对本品剂型与适应症覆盖范围的说明",
+        "请补充本品与同活性成分已上市产品之间关系的认定材料"
+      ],
+      "intervals": [
+        {
+          "interval_id": "C-201-I1",
+          "start_date": "2025-08-10",
+          "end_date": null,
+          "status": "pending",
+          "event_id": null,
+          "reg_id": "REG-2024",
+          "term_days": 2192,
+          "determination_id": "DET-2025-04"
+        }
+      ]
+    }
+  ],
+  "exceptions": [
+    {
+      "exception_id": "X-01",
+      "claim_id": "C-101",
+      "label": "为应对突发公共卫生事件而调用",
+      "start_date": "2024-10-01",
+      "end_date": "2024-12-31",
+      "determination_id": "DET-2024-02",
+      "disclosable": true
+    }
+  ],
+  "transfers": [
+    {
+      "transfer_id": "TR-1",
+      "claim_id": "C-102",
+      "from_holder": "甲公司",
+      "to_holder": "丙公司",
+      "effective_date": "2025-07-01",
+      "record_ref": "TRF-2025-07（示例备案号）",
+      "note": "中止期间备案的权利转让；只记录权利归属，不改变区间状态，不影响中止计时"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "E-WD-1",
+      "type": "撤回资料",
+      "date": "2024-05-25",
+      "submission_id": "S-101",
+      "determination_id": null,
+      "note": "S-101 旧版本撤回；以 S-101a 为准，撤回不删除原提交记录"
+    },
+    {
+      "event_id": "E-COURT-1",
+      "type": "法院决定",
+      "date": "2025-06-30",
+      "claim_id": "C-102",
+      "court_ref": "COURT-2025-009（示例）",
+      "determination_id": "DET-2025-02",
+      "note": "法院裁定中止，暂停计算保护期"
+    },
+    {
+      "event_id": "E-COURT-2",
+      "type": "法院决定",
+      "date": "2025-09-30",
+      "claim_id": "C-102",
+      "court_ref": "COURT-2025-014（示例）",
+      "determination_id": "DET-2025-03",
+      "note": "法院撤销中止，恢复效力并续算，中止期间不计入保护期消耗"
+    },
+    {
+      "event_id": "E-TRF-1",
+      "type": "持有人变更",
+      "date": "2025-07-01",
+      "claim_id": "C-102",
+      "transfer_id": "TR-1",
+      "determination_id": null,
+      "note": "对应转让记录 TR-1；不开新区间、不改状态"
+    },
+    {
+      "event_id": "E-REG-1",
+      "type": "规则换版",
+      "date": "2026-03-01",
+      "claim_id": "C-102",
+      "new_reg_id": "REG-2026",
+      "determination_id": "DET-2026-01",
+      "note": "新版生效另开区间；已过区间不溯及改写"
+    }
+  ],
+  "determinations": [
+    {
+      "determination_id": "DET-2024-01",
+      "claim_id": "C-101",
+      "submission_id": "S-101a",
+      "date": "2024-06-30",
+      "decision": "确认儿童药市场独占期自批准日起算",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"pediatric": 1826},
+      "data_sources_relied_on": ["D-01", "D-02"],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U1（示例）", "at": "2024-06-28T09:00", "role": "审评人员", "note": "儿童药身份与数据来源核验通过"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2024-06-29T14:00", "role": "法规复核人员", "note": "授权链 AUTH-01 与 REG-2024 例外清单核验"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2024-06-30T10:00", "role": "授权签发人", "note": "确认起算"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2024-02",
+      "claim_id": "C-101",
+      "submission_id": "S-101a",
+      "date": "2024-10-01",
+      "decision": "确认突发公共卫生事件例外调用 X-01",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"pediatric": 1826},
+      "data_sources_relied_on": ["D-01"],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U4（示例）", "at": "2024-10-01T09:00", "role": "审评人员", "note": "事件调用令 X-01 在 2024-10-01 至 2024-12-31 有效"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2024-10-01T10:00", "role": "法规复核人员", "note": "例外不改变独占期区间，仅在窗口内允许调用"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2024-10-01T11:00", "role": "授权签发人", "note": "确认例外窗口"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2025-01",
+      "claim_id": "C-102",
+      "submission_id": "S-201",
+      "date": "2025-02-01",
+      "decision": "确认罕见病用药市场独占期起算",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"orphan": 2557},
+      "data_sources_relied_on": ["D-03", "D-04"],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U1（示例）", "at": "2025-01-28T09:00", "role": "审评人员", "note": "注射剂与 P-101 同活性成分关系 REL-1 成立"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-01-30T14:00", "role": "法规复核人员", "note": "D-03 已公开披露、D-04 为补充提交，分别登记"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-02-01T10:00", "role": "授权签发人", "note": "确认起算"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2025-02",
+      "claim_id": "C-102",
+      "submission_id": "S-201",
+      "date": "2025-06-30",
+      "decision": "依法院决定中止 C-102 效力，暂停计算保护期",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"orphan": 2557},
+      "data_sources_relied_on": [],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U4（示例）", "at": "2025-06-30T11:00", "role": "审评人员", "note": "附法院文书 COURT-2025-009（示例）"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-06-30T15:00", "role": "法规复核人员", "note": "事件只开新区间，不改写 DET-2025-01"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-06-30T17:00", "role": "授权签发人", "note": "同意中止并停止计时"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2025-03",
+      "claim_id": "C-102",
+      "submission_id": "S-201",
+      "date": "2025-09-30",
+      "decision": "法院撤销中止，恢复 C-102 效力并续算",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"orphan": 2557},
+      "data_sources_relied_on": [],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U4（示例）", "at": "2025-09-30T11:00", "role": "审评人员", "note": "附法院文书 COURT-2025-014（示例）；中止期间不计时"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-09-30T15:00", "role": "法规复核人员", "note": "再开一个新区间；DET-2025-02 仍可回放"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-09-30T17:00", "role": "授权签发人", "note": "恢复并续算，届满日顺延 92 天"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2025-04",
+      "claim_id": "C-201",
+      "submission_id": "S-301",
+      "date": "2025-08-10",
+      "decision": "对 C-201 暂不确认独占期：授权链与同活性成分关系待补",
+      "reg_id": "REG-2024",
+      "terms_at_decision": {"general": 2192},
+      "data_sources_relied_on": [],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U1（示例）", "at": "2025-08-08T09:00", "role": "审评人员", "note": "D-05 所引 AUTH-01 授权范围存疑；P-201 与 P-102 关系待认定"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-08-09T14:00", "role": "法规复核人员", "note": "与 C-102 存在同活性成分冲突，按冲突主张复核处理"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-08-10T10:00", "role": "授权签发人", "note": "暂缓确认，列待补事项"}
+      ],
+      "frozen_record": true
+    },
+    {
+      "determination_id": "DET-2026-01",
+      "claim_id": "C-102",
+      "submission_id": "S-201",
+      "date": "2026-03-01",
+      "decision": "规则换版核定：按 REG-2026 复核 C-102 剩余保护期",
+      "reg_id": "REG-2026",
+      "terms_at_decision": {"orphan": 2557},
+      "data_sources_relied_on": ["D-03", "D-04"],
+      "approval_cycle": [
+        {"step": "起草", "by": "审评人员U1（示例）", "at": "2026-02-27T09:00", "role": "审评人员", "note": "旧区间保留，新区间引用 REG-2026，不追溯调整已过区间"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2026-02-28T14:00", "role": "法规复核人员", "note": "法不溯及既往，只对未届满部分适用新版"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2026-03-01T10:00", "role": "授权签发人", "note": "换版核定成立"}
+      ],
+      "frozen_record": true
+    }
+  ],
+  "applications": [
+    {
+      "application_id": "A-2024-03",
+      "product_id": "P-101",
+      "applicant_name": "丁公司",
+      "filing_date": "2024-03-15",
+      "target_claim_ids": ["C-101"],
+      "ask": "请求不依赖权利人数据进行审评",
+      "review_determination_id": "ADM-2024-03"
+    },
+    {
+      "application_id": "A-2024-07",
+      "product_id": "P-101",
+      "applicant_name": "丁公司",
+      "filing_date": "2024-07-15",
+      "target_claim_ids": ["C-101"],
+      "ask": "请求不依赖权利人数据进行审评",
+      "review_determination_id": "ADM-2024-07"
+    },
+    {
+      "application_id": "A-2024-11",
+      "product_id": "P-101",
+      "applicant_name": "丁公司",
+      "filing_date": "2024-11-15",
+      "target_claim_ids": ["C-101"],
+      "invoke_exception_id": "X-01",
+      "ask": "突发公共卫生事件应对用药品，申请调用法定例外",
+      "review_determination_id": "ADM-2024-11"
+    },
+    {
+      "application_id": "A-2025-08",
+      "product_id": "P-201",
+      "applicant_name": "乙公司",
+      "filing_date": "2025-08-15",
+      "target_claim_ids": ["C-102"],
+      "related_unconfirmed_claim_ids": ["C-201"],
+      "ask": "以自行数据申请成人适应症上市许可",
+      "review_determination_id": "ADM-2025-08"
+    },
+    {
+      "application_id": "A-2025-10",
+      "product_id": "P-201",
+      "applicant_name": "乙公司",
+      "filing_date": "2025-10-01",
+      "target_claim_ids": ["C-102"],
+      "related_unconfirmed_claim_ids": ["C-201"],
+      "ask": "以自行数据申请成人适应症上市许可",
+      "review_determination_id": "ADM-2025-10"
+    },
+    {
+      "application_id": "A-2026-04",
+      "product_id": "P-201",
+      "applicant_name": "乙公司",
+      "filing_date": "2026-04-01",
+      "target_claim_ids": ["C-102"],
+      "related_unconfirmed_claim_ids": ["C-201"],
+      "ask": "以自行数据申请成人适应症上市许可",
+      "review_determination_id": "ADM-2026-04"
+    }
+  ],
+  "administrative_reviews": [
+    {
+      "review_id": "ADM-2024-03",
+      "application_id": "A-2024-03",
+      "date": "2024-03-15",
+      "outcome": "受理",
+      "reg_id": "REG-2024",
+      "basis_claim_intervals": [],
+      "basis_exception_ids": [],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2024-03-15T09:00", "role": "受理人员", "note": "申请日尚无生效独占期主张"},
+        {"step": "核定", "by": "审评人员U1（示例）", "at": "2024-03-15T10:00", "role": "审评人员", "note": "适用申请当日有效的 REG-2024，无阻断区间"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2024-03-15T12:00", "role": "授权签发人", "note": "受理"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：截至申请日，示例酸A无生效独占期主张",
+        "待补：无"
+      ],
+      "pending_items_for_applicant": [],
+      "frozen_record": true
+    },
+    {
+      "review_id": "ADM-2024-07",
+      "application_id": "A-2024-07",
+      "date": "2024-07-15",
+      "outcome": "等待保护期届满",
+      "reg_id": "REG-2024",
+      "basis_claim_intervals": [
+        {"claim_id": "C-101", "interval_id": "C-101-I1", "status": "active", "term_days": 1826, "determination_id": "DET-2024-01"}
+      ],
+      "basis_exception_ids": [],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2024-07-15T09:00", "role": "受理人员", "note": "命中 active 独占期 C-101"},
+        {"step": "核定", "by": "审评人员U1（示例）", "at": "2024-07-15T10:00", "role": "审评人员", "note": "无法定例外适用于本申请；儿童药 1826 天"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2024-07-15T11:00", "role": "法规复核人员", "note": "回放到 2024-07-15 当日有效区间与 REG-2024"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2024-07-15T12:00", "role": "授权签发人", "note": "等待保护期届满"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：C-101 当前为 active，按 REG-2024 儿童药 1826 天，预计 2029-06-30 届满（以将来实际事件为准）",
+        "待补：无"
+      ],
+      "pending_items_for_applicant": [],
+      "frozen_record": true
+    },
+    {
+      "review_id": "ADM-2024-11",
+      "application_id": "A-2024-11",
+      "date": "2024-11-15",
+      "outcome": "受理",
+      "reg_id": "REG-2024",
+      "basis_claim_intervals": [
+        {"claim_id": "C-101", "interval_id": "C-101-I1", "status": "active", "term_days": 1826, "determination_id": "DET-2024-01"}
+      ],
+      "basis_exception_ids": ["X-01"],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2024-11-15T09:00", "role": "受理人员", "note": "虽命中 C-101 active 区间，但申请日落入例外 X-01 窗口"},
+        {"step": "核定", "by": "审评人员U4（示例）", "at": "2024-11-15T10:00", "role": "审评人员", "note": "突发公共卫生事件例外 2024-10-01 至 2024-12-31 有效"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2024-11-15T11:00", "role": "法规复核人员", "note": "例外窗口以 DET-2024-02 为据，独占期区间本身不受影响"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2024-11-15T12:00", "role": "授权签发人", "note": "依例外受理"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：申请日落入突发公共卫生事件例外窗口（2024-10-01 至 2024-12-31），可受理",
+        "待补：无"
+      ],
+      "pending_items_for_applicant": [],
+      "frozen_record": true
+    },
+    {
+      "review_id": "ADM-2025-08",
+      "application_id": "A-2025-08",
+      "date": "2025-08-15",
+      "outcome": "暂缓",
+      "reg_id": "REG-2024",
+      "basis_claim_intervals": [
+        {"claim_id": "C-102", "interval_id": "C-102-I2", "status": "suspended", "term_days": 0, "determination_id": "DET-2025-02"}
+      ],
+      "basis_exception_ids": [],
+      "unconfirmed_claim_ids": ["C-201"],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2025-08-15T09:00", "role": "受理人员", "note": "命中 C-102 法院中止区间（2025-06-30 至 2025-09-30）"},
+        {"step": "核定", "by": "审评人员U1（示例）", "at": "2025-08-15T10:00", "role": "审评人员", "note": "中止导致无法计算届满日；关联主张 C-201 尚无生效区间"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-08-15T11:00", "role": "法规复核人员", "note": "C-102 与 C-201 同活性成分，按冲突主张复核；DET-2025-01 不被覆盖"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-08-15T12:00", "role": "授权签发人", "note": "暂缓；披露当前状态与待补事项"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：C-102 自 2025-06-30 因法院决定中止（暂停计时），中止撤销前不计算届满日",
+        "可披露：同一活性成分上存在尚未确认的独占期主张，正在复核",
+        "待补：授权链覆盖范围说明、同活性成分产品关系认定"
+      ],
+      "pending_items_for_applicant": ["授权链覆盖范围说明", "同活性成分产品关系认定"],
+      "frozen_record": true
+    },
+    {
+      "review_id": "ADM-2025-10",
+      "application_id": "A-2025-10",
+      "date": "2025-10-01",
+      "outcome": "等待保护期届满",
+      "reg_id": "REG-2024",
+      "basis_claim_intervals": [
+        {"claim_id": "C-102", "interval_id": "C-102-I3", "status": "active", "term_days": 2557, "determination_id": "DET-2025-03"}
+      ],
+      "basis_exception_ids": [],
+      "unconfirmed_claim_ids": ["C-201"],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2025-10-01T09:00", "role": "受理人员", "note": "C-102 已恢复 active；C-201 仍未确认"},
+        {"step": "核定", "by": "审评人员U1（示例）", "at": "2025-10-01T10:00", "role": "审评人员", "note": "恢复后续算；92 天中止不计为消耗，届满日顺延 92 天"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2025-10-01T11:00", "role": "法规复核人员", "note": "ADM-2025-08 的暂缓记录仍为暂缓，不因恢复而改写"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2025-10-01T12:00", "role": "授权签发人", "note": "等待保护期届满；披露续算口径与待补事项"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：C-102 自 2025-09-30 恢复 active 并续算，中止共 92 天，届满日相应顺延",
+        "可披露：同一活性成分上的未确认主张仍在复核，确认后另行起算",
+        "待补：授权链覆盖范围说明、同活性成分产品关系认定"
+      ],
+      "pending_items_for_applicant": ["授权链覆盖范围说明", "同活性成分产品关系认定"],
+      "frozen_record": true
+    },
+    {
+      "review_id": "ADM-2026-04",
+      "application_id": "A-2026-04",
+      "date": "2026-04-01",
+      "outcome": "等待保护期届满",
+      "reg_id": "REG-2026",
+      "basis_claim_intervals": [
+        {"claim_id": "C-102", "interval_id": "C-102-I4", "status": "active", "term_days": 2557, "determination_id": "DET-2026-01"}
+      ],
+      "basis_exception_ids": [],
+      "unconfirmed_claim_ids": ["C-201"],
+      "approval_cycle": [
+        {"step": "受理筛查", "by": "受理人员R1（示例）", "at": "2026-04-01T09:00", "role": "受理人员", "note": "按 filing_date 取 2026-03-01 生效的 REG-2026"},
+        {"step": "核定", "by": "审评人员U1（示例）", "at": "2026-04-01T10:00", "role": "审评人员", "note": "C-102 在 REG-2026 下仍 active；92 天中止顺延继续有效"},
+        {"step": "复核", "by": "法规复核人员U2（示例）", "at": "2026-04-01T11:00", "role": "法规复核人员", "note": "法不溯及既往：2025-08-15 的暂缓仍成立，不能用新版或最新状态改写"},
+        {"step": "签发", "by": "授权签发人U3（示例）", "at": "2026-04-01T12:00", "role": "授权签发人", "note": "等待保护期届满"}
+      ],
+      "expectations_visible_to_applicant": [
+        "可披露：按申请当日有效的 REG-2026 评估，C-102 仍在保护期内（含 92 天中止顺延）",
+        "待补：无"
+      ],
+      "pending_items_for_applicant": [],
+      "frozen_record": true
+    }
   ]
 }
